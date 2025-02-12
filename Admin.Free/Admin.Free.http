@@ -1,0 +1,6 @@
+@Admin.Free_HostAddress = http://localhost:5242
+
+GET {{Admin.Free_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
