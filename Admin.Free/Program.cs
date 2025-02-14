@@ -1,5 +1,6 @@
 using Admin.Free;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Serilog
+builder.Services.AddSerilog((service, logger) =>
+{
+    logger.WriteTo.Console();
+});
 
 //mongodb for ef
 builder.Services.AddDbContext<AppDbContext>((service, options) =>
