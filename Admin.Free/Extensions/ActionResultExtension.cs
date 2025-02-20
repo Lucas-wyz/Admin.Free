@@ -9,9 +9,18 @@ namespace Admin.Free.Extensions
 	/// </summary>
 	public static class ActionResultExtension
 	{
-		public static object OKResult(this ControllerBase controller, object obj)
+		public static ResultObjet OKResult(this ControllerBase controller, object obj)
 		{
 			return new ResultObjet()
+			{
+				Code = 200,
+				Data = obj,
+				Message = "OK",
+			};
+		}
+		public static ResultObjet<T> OKResult<T>(this ControllerBase controller, T obj) where T : class
+		{
+			return new ResultObjet<T>()
 			{
 				Code = 200,
 				Data = obj,
