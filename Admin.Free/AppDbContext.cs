@@ -1,3 +1,4 @@
+using Admin.Free.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Admin.Free
@@ -9,6 +10,7 @@ namespace Admin.Free
         {
         }
 
+        public DbSet<Users> Users => Set<Users>();
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
         }
