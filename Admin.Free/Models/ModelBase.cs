@@ -1,4 +1,5 @@
-﻿using Admin.Free.Infra;
+﻿
+
 using System.ComponentModel.DataAnnotations;
 
 namespace Admin.Free.Models

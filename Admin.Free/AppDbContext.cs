@@ -11,6 +11,8 @@ namespace Admin.Free
         }
 
         public DbSet<Users> Users => Set<Users>();
+        public DbSet<Roles> Roles => Set<Roles>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
         }
