@@ -6,8 +6,12 @@ namespace Admin.Free
 
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+		private HttpContext _httpContext { get; set; }
+		private string _tenantId { get; set; }
+		public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
+			_httpContext = httpContextAccessor.HttpContext;
+			_tenantId = _httpContext.Request.Headers["TenantId"];
         }
 
         public DbSet<Users> Users => Set<Users>();
@@ -15,6 +19,7 @@ namespace Admin.Free
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+			modelBuilder.Entity<Users>().HasQueryFilter(x => x.TenantId == _tenantId).HasQueryFilter(x => x.IsDeleted == false);
         }
 
     }

@@ -16,6 +16,7 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpContextAccessor();
 //Serilog
 builder.Services.AddSerilog((service, logger) =>
 {
