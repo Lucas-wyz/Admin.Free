@@ -17,9 +17,9 @@ namespace Admin.Free.Models
 		public string ID { get; set; } = "";
 
 		/// <summary>
-		/// 租户
+		/// 租户Id
 		/// </summary>
-		public required string Tenant { get; set; } = "";
+		public required string TenantId { get; set; } = "";
 
 
 	}
