@@ -21,6 +21,10 @@ namespace Admin.Free.Models
 		/// </summary>
 		public required string TenantId { get; set; } = "";
 
+		/// <summary>
+		/// 软删除
+		/// </summary>
+		public bool? IsDeleted { get; set; } = false;
 
 	}
 }
