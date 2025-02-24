@@ -19,8 +19,38 @@ namespace Admin.Free
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-			modelBuilder.Entity<Users>().HasQueryFilter(x => x.TenantId == _tenantId).HasQueryFilter(x => x.IsDeleted == false);
+			//modelBuilder
+			foreach (var item in modelBuilder.Model.GetEntityTypes())
+			{
+				var type = item.ClrType;
+				var expression = QueryFilterBuild(type);
+
+				modelBuilder.Entity(type).HasQueryFilter(expression);
+			}
         }
 
+		public LambdaExpression? QueryFilterBuild(Type type)
+		{
+			if (type.BaseType == typeof(ModelBase))
+			{
+				var param = Expression.Parameter(type);
+
+				Expression<Func<string>> tenantLambda = () => _tenantId;
+				var tenantParamExpression = tenantLambda.Body;
+				var tenantEqualExpression = Expression.Equal(Expression.Property(param, nameof(ModelBase.TenantId)), tenantParamExpression);
+
+				Expression<Func<bool?>> deletedParameterLambda1 = () => false;
+				var deletedParamExpression1 = deletedParameterLambda1.Body;
+				var deletedEqualExpression = Expression.Equal(Expression.Property(param, nameof(ModelBase.IsDeleted)), deletedParamExpression1);
+
+				var andAlso = Expression.AndAlso(tenantEqualExpression, deletedEqualExpression);
+				LambdaExpression whereLambda = Expression.Lambda(andAlso, param);
+				return whereLambda;
+			}
+			else
+			{
+				return null;
+			}
+		}
     }
 }
