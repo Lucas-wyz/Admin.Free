@@ -21,5 +21,33 @@ namespace Admin.Free.Controllers
 			var list = query.ToList();
 			return this.OKResult(list);
 		}
+
+		[HttpPost]
+		public ResultObjet<Users> Post(Users users)
+		{
+			var query = dbc.Users.Add(users);
+			dbc.SaveChanges();
+			return this.OKResult(users);
+		}
+
+		[HttpPut("{ID}")]
+		public ResultObjet<Users> Put([FromRoute] string ID, Users users)
+		{
+			var query = dbc.Users.Find(ID);
+			query.Name = users.Name;
+			query.Email = users.Email;
+			query.Phone = users.Phone;
+			query.Address = users.Address;
+			dbc.SaveChanges();
+			return this.OKResult(users);
+		}
+		[HttpDelete("{ID}")]
+		public ResultObjet Del([FromRoute] string ID)
+		{
+			var query = dbc.Users.Find(ID);
+			dbc.Users.Remove(query);
+			dbc.SaveChanges();
+			return this.OKResult();
+		}
 	}
 }

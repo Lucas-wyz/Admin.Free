@@ -9,7 +9,7 @@ namespace Admin.Free.Extensions
 	/// </summary>
 	public static class ActionResultExtension
 	{
-		public static ResultObjet OKResult(this ControllerBase controller, object obj)
+		public static ResultObjet OKResult(this ControllerBase controller, object? obj=null)
 		{
 			return new ResultObjet()
 			{
