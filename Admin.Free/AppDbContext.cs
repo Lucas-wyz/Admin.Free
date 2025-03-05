@@ -1,5 +1,6 @@
 using Admin.Free.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Admin.Free
 {
@@ -16,6 +17,8 @@ namespace Admin.Free
 
         public DbSet<Users> Users => Set<Users>();
         public DbSet<Roles> Roles => Set<Roles>();
+		public DbSet<Questions> Questions => Set<Questions>();
+		public DbSet<QuestionOptions> QuestionOptions => Set<QuestionOptions>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
