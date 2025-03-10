@@ -1,3 +1,6 @@
+﻿using AutoMapper;
+using System.Collections;
+
 ﻿namespace Admin.Free.Infra
 {
 	public static class CollectionsExtension
@@ -10,6 +13,10 @@
 			}
 			return list;
 
+		}
+		public static IEnumerable<TDestination> ProjectTo<TDestination>(this IEnumerable source, IConfigurationProvider configuration)
+		{
+			return configuration.CreateMapper().Map<IEnumerable<TDestination>>(source);
 		}
 	}
 }
