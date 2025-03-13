@@ -18,5 +18,23 @@ using System.Collections;
 		{
 			return configuration.CreateMapper().Map<IEnumerable<TDestination>>(source);
 		}
+
+		/// <summary>
+		/// 分页
+		/// </summary>
+		/// <typeparam name="TSource"></typeparam>
+		/// <param name="source"></param>
+		/// <param name="index"></param>
+		/// <param name="size"></param>
+		/// <returns></returns>
+		public static IEnumerable<TSource> Page<TSource>(this IEnumerable<TSource> source, int index, int size)
+		{
+			index = index > 0 ? index : 0;
+			size = size > 0 ? size : 0;
+
+			var _skip = index * size;
+
+			return source.Skip(_skip).Take(size);
+		}
 	}
 }
