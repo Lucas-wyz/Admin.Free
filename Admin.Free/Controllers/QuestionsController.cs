@@ -1,4 +1,5 @@
 ﻿using Admin.Free.Extensions;
+using Admin.Free.Infra;
 using Admin.Free.Models;
 using Admin.Free.View;
 using AutoMapper;
@@ -13,12 +14,12 @@ namespace Admin.Free.Controllers
 	public class QuestionsController(AppDbContext dbc, ILogger<QuestionsController> logger) : ControllerBase
 	{
 		[HttpGet]
-		public ResultObjet<List<QuestionsView>> Get()
+		public ResultObjet<List<QuestionsView>> Get([FromQuery] QueryParameters queryParameters)
 		{
 			var configMap = new MapperConfiguration(cfg =>
 			cfg.CreateMap<Questions, QuestionsView>().ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList())));
 			 
-			var list = dbc.Questions.Take(10).ToList();
+			var list = dbc.Questions.Page(queryParameters.Page, queryParameters.Size).ToList();
 
 			var listView = configMap.CreateMapper().Map<List<Questions>, List<QuestionsView>>(list);
 			 
