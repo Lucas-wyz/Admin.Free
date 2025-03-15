@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
 using Admin.Free.Extensions;
+using Admin.Free.Infra;
 using Admin.Free.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Admin.Free.Controllers
 {
@@ -19,5 +20,16 @@ namespace Admin.Free.Controllers
 			var list = dbc.Roles.Take(10).ToList();
 			return this.OKResult(list);
 		}
+
+
+		[HttpDelete("{ID}")]
+		public ResultObjet Del([FromRoute] string ID)
+		{
+			var query = dbc.Roles.Find(ID);
+			dbc.Roles.Remove(query);
+			dbc.SaveChanges();
+			return this.OKResult();
+		}
+
 	}
 }
