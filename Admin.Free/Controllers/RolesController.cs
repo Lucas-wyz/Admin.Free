@@ -15,9 +15,9 @@ namespace Admin.Free.Controllers
 	public class RolesController(AppDbContext dbc, ILogger<UsersController> logger) : ControllerBase
 	{
 		[HttpGet]
-		public ResultObjet<List<Roles>> Get()
+		public ResultObjet<List<Roles>> Get([FromQuery] QueryParameters queryParameters)
 		{
-			var list = dbc.Roles.Take(10).ToList();
+			var list = dbc.Roles.Page(queryParameters.Page, queryParameters.Size).ToList();
 			return this.OKResult(list);
 		}
 
