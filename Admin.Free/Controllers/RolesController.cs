@@ -22,6 +22,15 @@ namespace Admin.Free.Controllers
 		}
 
 
+		[HttpPost]
+		public ResultObjet<Roles> Post([FromBody] Roles roles)
+		{
+			var query = dbc.Roles.Add(roles);
+			dbc.SaveChanges();
+			return this.OKResult(roles);
+		}
+
+	 
 		[HttpDelete("{ID}")]
 		public ResultObjet Del([FromRoute] string ID)
 		{
