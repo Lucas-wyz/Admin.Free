@@ -13,6 +13,34 @@ namespace Admin.Free.Controllers
 	[ApiController]
 	public class QuestionsController(AppDbContext dbc, ILogger<QuestionsController> logger) : ControllerBase
 	{
+		 
+		
+
+
+	 
+	 
+		[HttpPost]
+		public ResultObjet Post([FromBody] QuestionsView obj)
+		{
+			dbc.Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
+
+			obj.ID = Guid.NewGuid().ToString("n");
+			dbc.Questions.Add(obj);
+
+			List<QuestionOptions> oplist = obj.options.ToList();
+
+			foreach (var item in oplist)
+			{
+				item.ID = obj.ID = Guid.NewGuid().ToString("n");
+				item.QuestionID = obj.ID;
+			}
+
+			dbc.QuestionOptions.AddRange(oplist);
+
+			dbc.SaveChanges();
+			return this.OKResult();
+		}
+
 
 
 		/// <summary>
