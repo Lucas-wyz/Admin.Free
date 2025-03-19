@@ -89,5 +89,55 @@ namespace Admin.Free.Controllers
 		}
 
 	
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		[HttpPut("{id}")]
+		public ActionResult Put([FromRoute] string id, [FromBody] QuestionsView obj)
+		{
+
+			var questions = dbc.Questions.Find(id);
+
+
+			questions.question_title = obj.question_title;
+			questions.explanation_text = obj.explanation_text;
+			questions.question_type = obj.question_type;
+
+			var QuestionOptionsList = dbc.QuestionOptions.Where(x => x.QuestionID == id).ToList();
+
+			if (QuestionOptionsList.Count > 0)
+			{
+				foreach (var item in QuestionOptionsList)
+				{
+					item.IsDeleted = true;
+				}
+
+			}
+			List<QuestionOptions> list = new List<QuestionOptions>();
+			foreach (var item in obj.options)
+			{
+
+				item.ID = Guid.NewGuid().ToString("n");
+				item.QuestionID = id;
+				item.IsDeleted = false;
+
+				list.Add(item);
+
+			}
+
+			dbc.QuestionOptions.AddRange(list);
+
+
+			dbc.SaveChanges();
+
+			return Ok();
+
+		}
+
+
+
 	}
 }
