@@ -30,6 +30,25 @@ namespace Admin.Free.Controllers
 			return this.OKResult(roles);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="roles"></param>
+		/// <returns></returns>
+		[HttpPut("{id}")]
+		public ResultObjet Put([FromRoute] string id, [FromBody] Roles roles)
+		{
+			var query = dbc.Roles.Find(id);
+
+			query.Name = roles.Name;
+			query.Permissions = roles.Permissions;
+			query.Description = roles.Description;
+
+			dbc.SaveChanges();
+			return this.OKResult();
+		}
+
 	 
 		[HttpDelete("{ID}")]
 		public ResultObjet Del([FromRoute] string ID)
