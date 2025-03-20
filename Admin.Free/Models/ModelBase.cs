@@ -26,5 +26,14 @@ namespace Admin.Free.Models
 		/// </summary>
 		public bool? IsDeleted { get; set; } = false;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		public DateTime? CreatDate { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		public DateTime? UpdateDate { get; set; }
+
 	}
 }
