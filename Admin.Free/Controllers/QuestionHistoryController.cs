@@ -29,6 +29,21 @@ namespace Admin.Free.Controllers
 		}
 
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ID"></param>
+		/// <returns></returns>
+		[HttpDelete("{ID}")]
+		public ResultObjet Del([FromRoute] string ID)
+		{
+			var query = dbc.QuestionHistory.Find(ID);
+			dbc.QuestionHistory.Remove(query);
+			dbc.SaveChanges();
+			return this.OKResult();
+		}
+
+
 	}
 
 
