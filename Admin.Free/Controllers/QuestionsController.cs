@@ -41,6 +41,12 @@ namespace Admin.Free.Controllers
 			return this.OKResult();
 		}
 
+		[HttpPost("verify/{id}")]
+		public ResultObjet Verify([FromRoute]string id,[FromBody] QuestionsView obj)
+		{
+			return this.OKResult(true);
+		}
+		 
 
 
 		/// <summary>
