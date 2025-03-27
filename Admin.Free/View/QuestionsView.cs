@@ -8,5 +8,7 @@ namespace Admin.Free.View
 	public class QuestionsView : Questions
 	{
 		public IEnumerable<QuestionOptions> options { get; set; }
+
+		public IEnumerable<string> correct_answer { get; set; }
 	}
 }

@@ -11,6 +11,7 @@ namespace Admin.Free.Models
 		public string? QuestionID { get; set; }
 		public string? option_text { get; set; }
 		public string? option_value { get; set; }
+		public bool? correct { get; set; }
 	 
 	}
 }

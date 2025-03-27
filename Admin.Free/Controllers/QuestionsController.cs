@@ -84,7 +84,10 @@ namespace Admin.Free.Controllers
 		public ResultObjet<List<QuestionsView>> Get([FromQuery] QueryParameters queryParameters)
 		{
 			var configMap = new MapperConfiguration(cfg =>
-			cfg.CreateMap<Questions, QuestionsView>().ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList())));
+			cfg.CreateMap<Questions, QuestionsView>()
+			.ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList()))
+			.ForMember(x => x.correct_answer, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).Where(y => y.correct == true).Select(x => x.option_text).ToList()))
+			);
 			 
 			var list = dbc.Questions.Page(queryParameters.Page, queryParameters.Size).ToList();
 
