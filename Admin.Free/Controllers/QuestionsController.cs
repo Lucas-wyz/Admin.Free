@@ -104,8 +104,8 @@ namespace Admin.Free.Controllers
 		{
 			var configMap = new MapperConfiguration(cfg =>
 			cfg.CreateMap<Questions, QuestionsView>().ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList())));
-
-			var list = dbc.Questions.Page(queryParameters.Page, queryParameters.Size).First();
+			var random = Random.Shared.Next(0, dbc.Questions.Count());
+			var list = dbc.Questions.Skip(random).First();
 
 			var listView = configMap.CreateMapper().Map<Questions, QuestionsView>(list);
 
