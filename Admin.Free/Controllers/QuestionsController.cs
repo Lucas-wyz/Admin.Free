@@ -3,22 +3,24 @@ using Admin.Free.Infra;
 using Admin.Free.Models;
 using Admin.Free.View;
 using AutoMapper;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using System.Collections.Generic;
 
 namespace Admin.Free.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class QuestionsController(AppDbContext dbc, ILogger<QuestionsController> logger) : ControllerBase
+	public partial class QuestionsController(AppDbContext dbc, ILogger<QuestionsController> logger) : ControllerBase
 	{
-		 
-		
 
-
-	 
-	 
+		/// <summary>
+		/// 添加
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <returns></returns>
 		[HttpPost]
 		public ResultObjet Post([FromBody] QuestionsView obj)
 		{
@@ -41,16 +43,9 @@ namespace Admin.Free.Controllers
 			return this.OKResult();
 		}
 
-		[HttpPost("verify/{id}")]
-		public ResultObjet Verify([FromRoute]string id,[FromBody] QuestionsView obj)
-		{
-			return this.OKResult(true);
-		}
-		 
-
 
 		/// <summary>
-		/// 
+		/// 删除
 		/// </summary>
 		/// <returns></returns>
 		[HttpDelete("{id}")]
@@ -79,7 +74,11 @@ namespace Admin.Free.Controllers
 
 
 
-
+		/// <summary>
+		/// 获取列表
+		/// </summary>
+		/// <param name="queryParameters"></param>
+		/// <returns></returns>
 		[HttpGet]
 		public ResultObjet<List<QuestionsView>> Get([FromQuery] QueryParameters queryParameters)
 		{
@@ -88,33 +87,42 @@ namespace Admin.Free.Controllers
 			.ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList()))
 			.ForMember(x => x.correct_answer, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).Where(y => y.correct == true).Select(x => x.option_text).ToList()))
 			);
-			 
+
 			var list = dbc.Questions.Page(queryParameters.Page, queryParameters.Size).ToList();
 
 			var listView = configMap.CreateMapper().Map<List<Questions>, List<QuestionsView>>(list);
-			 
-			return this.OKResult(listView);
-
-		}
-
-	
-
-		[HttpGet("GetRandom")]
-		public ResultObjet<QuestionsView> GetRandom([FromQuery] QueryParameters queryParameters)
-		{
-			var configMap = new MapperConfiguration(cfg =>
-			cfg.CreateMap<Questions, QuestionsView>().ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList())));
-			var random = Random.Shared.Next(0, dbc.Questions.Count());
-			var list = dbc.Questions.Skip(random).First();
-
-			var listView = configMap.CreateMapper().Map<Questions, QuestionsView>(list);
 
 			return this.OKResult(listView);
 
 		}
 
 		/// <summary>
-		/// 
+		/// 获取单个
+		/// </summary>
+		/// <param name="queryParameters"></param>
+		/// <returns></returns>
+		[HttpGet("{id}")]
+		public ResultObjet<QuestionsView> Get([FromRoute] string id, [FromQuery] QueryParameters queryParameters)
+		{
+			var configMap = new MapperConfiguration(cfg =>
+			cfg.CreateMap<Questions, QuestionsView>()
+			.ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList()))
+			.ForMember(x => x.correct_answer, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).Where(y => y.correct == true).Select(x => x.option_text).ToList()))
+			);
+
+			var query = dbc.Questions.Where(x => x.ID == id).First();
+
+			var listView = configMap.CreateMapper().Map<Questions, QuestionsView>(query);
+
+			return this.OKResult(listView);
+
+		}
+
+
+
+
+		/// <summary>
+		/// 编辑
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
@@ -161,6 +169,58 @@ namespace Admin.Free.Controllers
 		}
 
 
+
+	}
+
+
+
+
+	public partial class QuestionsController : ControllerBase
+
+	{
+
+
+		/// <summary>
+		/// 随机获取题目
+		/// </summary>
+		/// <param name="queryParameters"></param>
+		/// <returns></returns>
+		[HttpGet("GetRandom")]
+		public ResultObjet<QuestionsView> GetRandom([FromQuery] QueryParameters queryParameters)
+		{
+			var configMap = new MapperConfiguration(cfg =>
+			cfg.CreateMap<Questions, QuestionsView>().ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList())));
+			var random = Random.Shared.Next(0, dbc.Questions.Count());
+			var list = dbc.Questions.Skip(random).First();
+
+			var listView = configMap.CreateMapper().Map<Questions, QuestionsView>(list);
+
+			return this.OKResult(listView);
+
+		}
+
+		/// <summary>
+		/// 验证
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="obj"></param>
+		/// <returns></returns>
+		[HttpPost("verify/{id}")]
+		public ResultObjet Verify([FromRoute] string id, [FromBody] QuestionsView obj)
+		{
+
+			var configMap = new MapperConfiguration(cfg =>
+			cfg.CreateMap<Questions, QuestionsView>()
+			.ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList()))
+			.ForMember(x => x.correct_answer, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).Where(y => y.correct == true).Select(x => x.option_text).ToList()))
+			);
+
+			var query = dbc.Questions.Where(x => x.ID == id).First();
+
+			var listView = configMap.CreateMapper().Map<Questions, QuestionsView>(query);
+			 
+			return this.OKResult(true);
+		}
 
 	}
 }
