@@ -219,7 +219,33 @@ namespace Admin.Free.Controllers
 
 			var listView = configMap.CreateMapper().Map<Questions, QuestionsView>(query);
 			 
-			return this.OKResult(true);
+
+			var _answer = listView.options.Where(x => x.correct == true).ToList();
+			var _input = obj.options.Where(x => x.correct == true).ToList();
+
+			var _tag = false;
+			if (_answer.Count == _input.Count)
+			{
+				var _result = _input.Where(x => _answer.Where(y => y.ID == x.ID).Any()).ToList();
+				if (_input.Count == _result.Count)
+				{
+					_tag = true;
+				}
+			}
+
+			///记录结果
+			dbc.QuestionHistory.Add(new QuestionHistory()
+			{
+				IsDeleted = false,
+				QuestionID = obj.ID,
+				is_correct = _tag,
+				submit_time = new DateTime(),
+				UserID = "",
+				UserName = "",
+			});
+			dbc.SaveChanges();
+
+			return this.OKResult(_tag);
 		}
 
 	}
