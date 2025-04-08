@@ -33,7 +33,7 @@ namespace Admin.Free.Controllers
 
 			foreach (var item in oplist)
 			{
-				item.ID = obj.ID = Guid.NewGuid().ToString("n");
+				item.ID = Guid.NewGuid().ToString("n");
 				item.QuestionID = obj.ID;
 			}
 
@@ -239,7 +239,7 @@ namespace Admin.Free.Controllers
 				IsDeleted = false,
 				QuestionID = obj.ID,
 				is_correct = _tag,
-				submit_time = new DateTime(),
+				submit_time = DateTime.Now,
 				UserID = "",
 				UserName = "",
 			});
