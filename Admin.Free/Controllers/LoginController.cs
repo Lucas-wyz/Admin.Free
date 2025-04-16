@@ -1,7 +1,9 @@
 ﻿using Admin.Free.Extensions;
 using Admin.Free.Infra;
 using Admin.Free.Models;
+using Admin.Free.View;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Admin.Free.Controllers
 {
@@ -9,6 +11,21 @@ namespace Admin.Free.Controllers
 	[ApiController]
 	public class LoginController(AppDbContext dbc, ILogger<LoginController> logger) : ControllerBase
 	{
+
+		[HttpPost("JwtTest")]
+		public ResultObjet<LoginRes> PostJwtTest([FromBody] object obj)
+		{
+
+			var jwtToken = JwtConfig.CreateToken(new Claim[] { });
+
+			var token = new LoginRes()
+			{
+				Authentication = true,
+				Token = jwtToken,
+			};
+			return this.OKResult<LoginRes>(token);
+
+		}
 
 		[HttpPost]
 		public ResultObjet<string> Post([FromBody] Users obj)

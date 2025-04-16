@@ -38,7 +38,7 @@ namespace Admin.Free
 
 			// 1. 定义需要使用到的Claims
 			claims = claims ?? new List<Claim>();
-			claims.Append(new Claim(JwtRegisteredClaimNames.Jti, "admin"));
+			claims = claims.Append(new Claim(JwtRegisteredClaimNames.Jti, "admin"));
 
 			// 2. 读取SecretKey
 			var secretKey = new SymmetricSecurityKey(JwtConfig.secretKeyBytes);
