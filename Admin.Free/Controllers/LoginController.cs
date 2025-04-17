@@ -12,6 +12,38 @@ namespace Admin.Free.Controllers
 	public class LoginController(AppDbContext dbc, ILogger<LoginController> logger) : ControllerBase
 	{
 
+
+		[HttpPost("Jwt")]
+		public ResultObjet<LoginRes> PostJwt([FromBody] LoginReq obj)
+		{
+
+			var user = dbc.Accounts.Where(x => x.account == obj.account && x.password == obj.password).First();
+
+			if (user != null)
+			{
+				var jwtToken = JwtConfig.CreateToken(new Claim[] { new Claim("uid", user.ID), });
+
+				var token = new LoginRes()
+				{
+					Authentication = true,
+					Token = jwtToken,
+				};
+				return this.OKResult<LoginRes>(token);
+
+			}
+			else
+			{
+				var token = new LoginRes()
+				{
+					Authentication = false,
+					Token = "",
+				};
+				return this.OKResult<LoginRes>(token);
+			}
+
+		}
+
+
 		[HttpPost("JwtTest")]
 		public ResultObjet<LoginRes> PostJwtTest([FromBody] object obj)
 		{

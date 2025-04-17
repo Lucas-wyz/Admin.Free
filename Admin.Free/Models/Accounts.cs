@@ -10,7 +10,7 @@ namespace Admin.Free.Models
 	{
 		public string uid { get; set; }
 		public string? Name { get; set; }
-
+		public string? account { get; set; }
 		public string? password { get; set; }
 
 	}
