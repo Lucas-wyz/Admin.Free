@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using System.Collections;
 
-﻿namespace Admin.Free.Infra
+namespace Admin.Free.Infra
 {
 	public static class CollectionsExtension
 	{
@@ -27,10 +27,10 @@ using System.Collections;
 		/// <param name="index"></param>
 		/// <param name="size"></param>
 		/// <returns></returns>
-		public static IEnumerable<TSource> Page<TSource>(this IEnumerable<TSource> source, int index, int size)
+		public static IQueryable<TSource> Page<TSource>(this IQueryable<TSource> source, int index, int size)
 		{
-			index = index > 0 ? index : 0;
-			size = size > 0 ? size : 0;
+			index = index > 1 ? index - 1 : 0;
+			size = size > 1 ? size : 1;
 
 			var _skip = index * size;
 
