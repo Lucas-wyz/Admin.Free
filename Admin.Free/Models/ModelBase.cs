@@ -35,5 +35,13 @@ namespace Admin.Free.Models
 		/// </summary>
 		public DateTime? UpdateDate { get; set; }
 
+		/// <summary>
+		/// 创建人
+		/// </summary>
+		public string? CreateBy { get; set; }
+		/// <summary>
+		/// 修改人
+		/// </summary>
+		public string? UpdateBy { get; set; }
 	}
 }
