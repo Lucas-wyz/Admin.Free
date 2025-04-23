@@ -59,14 +59,6 @@ namespace Admin.Free.Controllers
 
 		}
 
-		[HttpPost]
-		public ResultObjet<string> Post([FromBody] Users obj)
-		{
-
-			var user = dbc.Users.Where(x => x.Name == obj.Name && x.Phone == obj.Phone).First();
-
-			return this.OKResult("token");
-		}
 
 	}
 
