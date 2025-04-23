@@ -9,7 +9,7 @@ namespace Admin.Free.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class UsersController(AppDbContext dbc, ILogger<UsersController> logger) : ControllerBase
+	public partial class UsersController(AppDbContext dbc, ILogger<UsersController> logger) : ControllerBase
 	{
 		[HttpGet]
 		public ResultObjet<List<Users>> Get([FromQuery] QueryParameters queryParameters, string? name)
@@ -51,4 +51,27 @@ namespace Admin.Free.Controllers
 			return this.OKResult();
 		}
 	}
+
+	public partial class UsersController : ControllerBase
+	{
+		[HttpPost("EditPassword/{id}")]
+		public ResultObjet EditPassword([FromBody] Accounts obj, [FromRoute] string id)
+		{
+
+			var query = dbc.Accounts.Where(x => x.uid == id).ToList();
+
+			foreach (var item in query)
+			{
+				item.IsDeleted = true;
+			}
+
+			dbc.Accounts.Add(new Accounts { uid = id, account = obj.account, password = obj.password });
+			dbc.SaveChanges();
+
+			return this.OKResult<bool>(true);
+		}
+
+	}
+
+
 }
