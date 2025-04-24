@@ -54,6 +54,14 @@ namespace Admin.Free.Controllers
 
 	public partial class UsersController : ControllerBase
 	{
+		[HttpGet("EditPassword/{id}")]
+		public ResultObjet<Accounts> EditPassword([FromRoute] string id)
+		{
+			var query = dbc.Accounts.Where(x => x.uid == id).First();
+			 
+			return this.OKResult(query);
+		}
+		
 		[HttpPost("EditPassword/{id}")]
 		public ResultObjet EditPassword([FromBody] Accounts obj, [FromRoute] string id)
 		{
