@@ -1,4 +1,4 @@
-using Admin.Free.Extensions;
+﻿using Admin.Free.Extensions;
 using Admin.Free.Infra;
 using Admin.Free.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +49,7 @@ namespace Admin.Free.Controllers
 			return this.OKResult();
 		}
 
-	 
+
 		[HttpDelete("{ID}")]
 		public ResultObjet Del([FromRoute] string ID)
 		{
