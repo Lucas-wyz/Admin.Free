@@ -17,11 +17,11 @@ namespace Admin.Free.Controllers
 		public ResultObjet<LoginRes> PostJwt([FromBody] LoginReq obj)
 		{
 
-			var user = dbc.Accounts.Where(x => x.account == obj.account && x.password == obj.password).First();
+			var user = dbc.Accounts.Where(x => x.account == obj.account && x.password == obj.password).FirstOrDefault();
 
 			if (user != null)
 			{
-				var jwtToken = JwtConfig.CreateToken(new Claim[] { new Claim("uid", user.ID), });
+				var jwtToken = JwtConfig.CreateToken(new Claim[] { new Claim("uid", user.uid), });
 
 				var token = new LoginRes()
 				{
