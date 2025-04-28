@@ -57,7 +57,7 @@ namespace Admin.Free.Controllers
 		[HttpGet("EditPassword/{id}")]
 		public ResultObjet<Accounts> EditPassword([FromRoute] string id)
 		{
-			var query = dbc.Accounts.Where(x => x.uid == id).First();
+			var query = dbc.Accounts.Where(x => x.uid == id).FirstOrDefault();
 			 
 			return this.OKResult(query);
 		}
