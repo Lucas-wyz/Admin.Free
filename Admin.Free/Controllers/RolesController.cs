@@ -57,8 +57,12 @@ namespace Admin.Free.Controllers
 		[HttpDelete("{ID}")]
 		public ResultObjet Del([FromRoute] string ID)
 		{
-			var query = dbc.Roles.Find(ID);
-			dbc.Roles.Remove(query);
+			var query = dbc.Roles.Where(x => x.ID == ID).ToList();
+
+			foreach (var item in query)
+			{
+				item.IsDeleted = true;
+			}
 			dbc.SaveChanges();
 			return this.OKResult();
 		}
