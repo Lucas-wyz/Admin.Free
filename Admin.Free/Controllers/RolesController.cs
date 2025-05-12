@@ -23,11 +23,15 @@ namespace Admin.Free.Controllers
 
 
 		[HttpPost]
-		public ResultObjet<Roles> Post([FromBody] Roles roles)
+		public ResultObjet Post([FromBody] Roles roles)
 		{
+
+			roles.ID = Guid.NewGuid().ToString("n");
+			roles.IsDeleted = false;
+
 			var query = dbc.Roles.Add(roles);
 			dbc.SaveChanges();
-			return this.OKResult(roles);
+			return this.OKResult();
 		}
 
 		/// <summary>
