@@ -33,9 +33,9 @@ namespace Admin.Free
 		/// </summary>
 		/// <param name="claims"></param>
 		/// <returns></returns>
-		public static string CreateToken(IEnumerable<Claim> claims = null)
+		public static string CreateToken(IEnumerable<Claim> claims = null, DateTime? expires = null)
 		{
-
+			expires = expires ?? DateTime.Now.AddHours(30);
 			// 1. 定义需要使用到的Claims
 			claims = claims ?? new List<Claim>();
 			claims = claims.Append(new Claim(JwtRegisteredClaimNames.Jti, "admin"));
@@ -50,7 +50,7 @@ namespace Admin.Free
 			var signingCredentials = new SigningCredentials(secretKey, algorithm);
 
 			// 5. 根据以上，生成token
-			var jwtSecurityToken = new JwtSecurityToken(issuer: issuer, audience: audience, claims: claims, notBefore: DateTime.Now, expires: DateTime.Now.AddHours(30), signingCredentials: signingCredentials);
+			var jwtSecurityToken = new JwtSecurityToken(issuer: issuer, audience: audience, claims: claims, notBefore: DateTime.Now, expires: expires, signingCredentials: signingCredentials);
 
 			// 6. 将token变为string
 			var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
