@@ -21,6 +21,7 @@ namespace Admin.Free
 		public DbSet<Questions> Questions => Set<Questions>();
 		public DbSet<QuestionOptions> QuestionOptions => Set<QuestionOptions>();
 		public DbSet<QuestionHistory> QuestionHistory => Set<QuestionHistory>();
+		public DbSet<UserRole> UserRole => Set<UserRole>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
