@@ -21,6 +21,13 @@ namespace Admin.Free.Controllers
 			return this.OKResult(list);
 		}
 
+		[HttpGet("list")]
+		public ResultObjet<List<RolesView>> GetList([FromQuery] QueryParameters queryParameters)
+		{
+			var configMap = new MapperConfiguration(cfg => cfg.CreateMap<Roles, RolesView>());
+			var list = dbc.Roles.ProjectTo<RolesView>(configMap).ToList();
+			return this.OKResult(list);
+		}
 
 		[HttpPost]
 		public ResultObjet Post([FromBody] Roles roles)
