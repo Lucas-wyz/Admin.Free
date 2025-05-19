@@ -79,6 +79,28 @@ namespace Admin.Free.Controllers
 			return this.OKResult<bool>(true);
 		}
 
+		[HttpPost("EditRole/{id}")]
+		public ResultObjet EditRole([FromRoute] string id, [FromBody] List<string> obj)
+		{
+
+			var query = dbc.UserRole.Where(x => x.UserID == id).ToList();
+
+			foreach (var item in query)
+			{
+				item.IsDeleted = true;
+			}
+			var ff = obj.Select(x => new UserRole()
+			{
+
+				UserID = id,
+				RoleID = x,
+			}).ToList();
+			dbc.UserRole.AddRange(ff);
+			dbc.SaveChanges();
+
+			return this.OKResult<bool>(true);
+		}
+
 	}
 
 
