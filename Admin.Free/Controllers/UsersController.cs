@@ -4,23 +4,39 @@ using Admin.Free;
 using Admin.Free.Infra;
 using Admin.Free.Extensions;
 using Admin.Free.Models;
+using Admin.Free.View;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using AutoMapper.Execution;
+using AutoMapper.Features;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace Admin.Free.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
 	public partial class UsersController(AppDbContext dbc, ILogger<UsersController> logger) : ControllerBase
+	public partial class UsersController(AppDbContext dbc, ILogger<UsersController> logger, IMapper mapper, AutoMapper.IConfigurationProvider ConfigurationProvider) : ControllerBase
 	{
 		[HttpGet]
-		public ResultObjet<List<Users>> Get([FromQuery] QueryParameters queryParameters, string? name)
+		public ResultObjet<List<UsersView>> Get([FromQuery] QueryParameters queryParameters, string? name)
 		{
+
+			var configMap = new MapperConfiguration(cfg =>
+			cfg.CreateMap<Users, UsersView>()
+			.ForMember(x => x.RoleList, o => o.MapFrom(s => dbc.UserRole.Where(y => y.UserID == s.ID).Select(y => y.RoleID).ToList()))
+			);
 			var query = dbc.Users.AsQueryable();
 			if (!string.IsNullOrWhiteSpace(name))
 			{
 				query = query.Where(x => x.Name.Contains(name));
 			}
-			var list = query.Page(queryParameters.Page, queryParameters.Size).ToList();
-			return this.OKResult(list);
+
+			var list = query.Page(queryParameters.Page, queryParameters.Size, out int count, true).ProjectTo<UsersView>(ConfigurationProvider).ToList();
+		
+			return this.OKResult<List<UsersView>>(list);
 		}
 
 		[HttpPost]

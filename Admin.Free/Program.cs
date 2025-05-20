@@ -56,6 +56,18 @@ builder.Services.AddDbContext<AppDbContext>((service, options) =>
 	options.UseMongoDB(service.GetService<IConfiguration>().GetConnectionString("mongodb"), "appdb");
 });
 
+
+builder.Services.AddScoped<AutoMapper.IConfigurationProvider>(x => {
+	var dbc = x.GetService<AppDbContext>();
+
+	return new MapperConfiguration(cfg =>
+			cfg.CreateMap<Users, UsersView>()
+			.ForMember(x => x.RoleList, o => o.MapFrom(s => dbc.UserRole.Where(y => y.UserID == s.ID).Select(y => y.RoleID).ToList())));
+			});
+
+builder.Services.AddScoped<AutoMapper.IMapper>(x => { var dbc = x.GetService<AutoMapper.IConfigurationProvider>();
+	return dbc.CreateMapper();
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
