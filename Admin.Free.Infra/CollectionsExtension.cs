@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using System.Collections;
+using System.Linq.Expressions;
 
 namespace Admin.Free.Infra
 {
@@ -28,7 +29,8 @@ namespace Admin.Free.Infra
 
 		public static IEnumerable<TDestination> ProjectTo<TDestination>(this IEnumerable source, IConfigurationProvider configuration)
 		{
-			return configuration.CreateMapper().Map<IEnumerable<TDestination>>(source);
+            var SourceList  = source.Cast<object>().ToList();
+            return configuration.CreateMapper().Map<IEnumerable<TDestination>>(SourceList);
 		}
 
 		/// <summary>
@@ -48,5 +50,15 @@ namespace Admin.Free.Infra
 
 			return source.Skip(_skip).Take(size);
 		}
+
+        public static IEnumerable<TSource> Page<TSource>(this IEnumerable<TSource> source, int index, int size)
+        {
+            index = index > 1 ? index - 1 : 0;
+            size = size > 1 ? size : 1;
+
+            var _skip = index * size;
+
+            return source.Skip(_skip).Take(size).ToList();
+        }
 	}
 }
