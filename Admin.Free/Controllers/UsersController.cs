@@ -34,7 +34,7 @@ namespace Admin.Free.Controllers
 				query = query.Where(x => x.Name.Contains(name));
 			}
 
-			var list = query.Page(queryParameters.Page, queryParameters.Size, out int count, true).ProjectTo<UsersView>(ConfigurationProvider).ToList();
+            var list = query.Page(queryParameters.Page, queryParameters.Size).ToList().ProjectTo<UsersView>(ConfigurationProvider).ToList();
 		
 			return this.OKResult<List<UsersView>>(list);
 		}
