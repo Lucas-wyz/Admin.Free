@@ -5,6 +5,8 @@ using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Admin.Free.Models;
 using Microsoft.IdentityModel.Tokens;
+using Admin.Free.View;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +59,7 @@ builder.Services.AddDbContext<AppDbContext>((service, options) =>
 });
 
 
+// AutoMapper
 builder.Services.AddScoped<AutoMapper.IConfigurationProvider>(x => {
 	var dbc = x.GetService<AppDbContext>();
 
@@ -68,6 +71,7 @@ builder.Services.AddScoped<AutoMapper.IConfigurationProvider>(x => {
 builder.Services.AddScoped<AutoMapper.IMapper>(x => { var dbc = x.GetService<AutoMapper.IConfigurationProvider>();
 	return dbc.CreateMapper();
 });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
