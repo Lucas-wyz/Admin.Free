@@ -13,7 +13,8 @@ namespace Admin.Free.Models
 		/// <summary>
 		/// 题目
 		/// </summary>
-		public int QuestionID { get; set; }
+		public string QuestionID { get; set; }
+
 		/// <summary>
 		/// 用户
 		/// </summary>

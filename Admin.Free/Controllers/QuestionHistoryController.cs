@@ -2,6 +2,9 @@
 using Admin.Free.Infra;
 using Admin.Free.Extensions;
 using Admin.Free.Models;
+using Admin.Free;
+using Admin.Free.View;
+using AutoMapper;
 
 namespace Admin.Free.Controllers
 {
@@ -20,11 +23,21 @@ namespace Admin.Free.Controllers
 		/// <param name="queryParameters"></param>
 		/// <returns></returns>
 		[HttpGet]
-		public ResultObjet<List<QuestionHistory>> Get([FromQuery] QueryParameters queryParameters)
+        public ResultObjet<List<QuestionHistoryView>> Get([FromQuery] QueryParameters queryParameters)
 		{
+            var configMap = new MapperConfiguration(cfg =>
+            cfg.CreateMap<QuestionHistory, QuestionHistoryView>()
+            .ForMember(x => x.question_title, o => o.MapFrom(s => dbc.Questions.Where(y => y.ID == s.QuestionID).Select(y => y.question_title).FirstOrDefault()))
+            );
 			var query = dbc.QuestionHistory.AsQueryable();
 
-			var list = query.Page(queryParameters.Page, queryParameters.Size).ToList();
+            var list = query.OrderByDescending(x => x.CreatDate).Page(queryParameters.Page, queryParameters.Size).ToList().ProjectTo<QuestionHistoryView>(configMap).ToList();
+
+            foreach (var item in list)
+            {
+                item.question_title = dbc.Questions.Where(x => x.ID == item.QuestionID).Select(x => x.question_title).FirstOrDefault();
+            }
+
 			return this.OKResult(list);
 		}
 
