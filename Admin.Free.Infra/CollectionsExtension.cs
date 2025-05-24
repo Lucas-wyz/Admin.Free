@@ -51,6 +51,16 @@ namespace Admin.Free.Infra
 			return source.Skip(_skip).Take(size);
 		}
 
+        public static IQueryable<TSource> Page<TSource>(this IQueryable<TSource> source, int index, int size, out int count)
+        {
+            index = index > 1 ? index - 1 : 0;
+            size = size > 1 ? size : 1;
+
+            var _skip = index * size;
+            count = source.Count();
+            return source.Skip(_skip).Take(size);
+        }
+
         public static IEnumerable<TSource> Page<TSource>(this IEnumerable<TSource> source, int index, int size)
         {
             index = index > 1 ? index - 1 : 0;
@@ -58,6 +68,16 @@ namespace Admin.Free.Infra
 
             var _skip = index * size;
 
+            return source.Skip(_skip).Take(size).ToList();
+        }
+
+        public static IEnumerable<TSource> Page<TSource>(this IEnumerable<TSource> source, int index, int size, out int count, bool tag)
+        {
+            index = index > 1 ? index - 1 : 0;
+            size = size > 1 ? size : 1;
+
+            var _skip = index * size;
+            count = source.Count();
             return source.Skip(_skip).Take(size).ToList();
         }
 	}
