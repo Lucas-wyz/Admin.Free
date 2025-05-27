@@ -23,6 +23,7 @@ namespace Admin.Free.Controllers
         /// </summary>
         /// <param name="queryParameters"></param>
         /// <returns></returns>
+        [HttpGet]
         public ResultObjet<List<Exams>> Get([FromQuery] QueryParameters queryParameters)
         {
             var list = dbc.Exams.Page(queryParameters.Page, queryParameters.Size).ToList();
@@ -31,6 +32,22 @@ namespace Admin.Free.Controllers
 
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exams"></param>
+        /// <returns></returns>
+        [HttpPost()]
+        public ResultObjet<bool> Post([FromBody] Exams exams)
+        {
+            exams.ID = Guid.NewGuid().ToString("n");
+
+            dbc.Add(exams);
+            dbc.SaveChanges();
+
+            return this.OKResult<bool>(true);
+        }
 
     }
 }
