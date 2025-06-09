@@ -136,6 +136,7 @@ namespace Admin.Free.Controllers
 			questions.question_title = obj.question_title;
 			questions.explanation_text = obj.explanation_text;
 			questions.question_type = obj.question_type;
+			questions.category_name = obj.category_name;
 
 			var QuestionOptionsList = dbc.QuestionOptions.Where(x => x.QuestionID == id).ToList();
 

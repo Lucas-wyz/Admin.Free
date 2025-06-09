@@ -21,6 +21,11 @@ namespace Admin.Free.Models
 		/// </summary>
 		public string? question_type { get; set; }
 	 
+        /// <summary>
+        /// 类别
+        /// </summary>
+        public string? category_name { get; set; }
+	 
 	
 	}
 }
