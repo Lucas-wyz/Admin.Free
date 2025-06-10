@@ -33,6 +33,23 @@ namespace Admin.Free.Controllers
         }
 
 
+        [HttpDelete("{id}")]
+        public ResultObjet<bool> Del([FromRoute] string id)
+        {
+
+            var query = dbc.Exams.Where(x => x.ID == id).ToList();
+
+            foreach (var item in query)
+            {
+                item.IsDeleted = true;
+            }
+            dbc.SaveChanges();
+
+            return this.OKResult<bool>(true);
+        }
+
+
+
         /// <summary>
         /// 
         /// </summary>
