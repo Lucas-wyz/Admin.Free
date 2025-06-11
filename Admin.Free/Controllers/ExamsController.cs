@@ -49,6 +49,63 @@ namespace Admin.Free.Controllers
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exams"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public ResultObjet<bool> Put([FromRoute] string id, [FromBody] Exams exams)
+        {
+
+            var query = dbc.Exams.Where(x => x.ID == id).First();
+            query.Name = exams.Name;
+            query.Type = exams.Type;
+
+            dbc.SaveChanges();
+
+            return this.OKResult<bool>(true);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exams"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public ResultObjet<bool> Put([FromRoute] string id, [FromBody] Exams exams)
+        {
+
+            var query = dbc.Exams.Where(x => x.ID == id).First();
+            query.Name = exams.Name;
+            query.Type = exams.Type;
+
+            dbc.SaveChanges();
+
+            return this.OKResult<bool>(true);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exams"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public ResultObjet<bool> Put([FromRoute] string id, [FromBody] Exams exams)
+        {
+
+            var query = dbc.Exams.Where(x => x.ID == id).First();
+            query.Name = exams.Name;
+            query.Type = exams.Type;
+
+            dbc.SaveChanges();
+
+            return this.OKResult<bool>(true);
+        }
+
+
 
         /// <summary>
         /// 
