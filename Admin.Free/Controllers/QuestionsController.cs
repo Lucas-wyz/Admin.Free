@@ -187,12 +187,15 @@ namespace Admin.Free.Controllers
 		/// <param name="queryParameters"></param>
 		/// <returns></returns>
 		[HttpGet("GetRandom")]
-		public ResultObjet<QuestionsView> GetRandom([FromQuery] QueryParameters queryParameters)
+		public ResultObjet<QuestionsView> GetRandom([FromQuery] QueryParameters queryParameters, [FromQuery] Questions questions )
 		{
+			var query = dbc.Questions.WhereIF(!string.IsNullOrWhiteSpace(questions.category_name), x => x.category_name == questions.category_name);
+
 			var configMap = new MapperConfiguration(cfg =>
 			cfg.CreateMap<Questions, QuestionsView>().ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList())));
-			var random = Random.Shared.Next(0, dbc.Questions.Count());
-			var list = dbc.Questions.Skip(random).First();
+			
+			var random = Random.Shared.Next(0, query.Count());
+            var list = query.Skip(random).First();
 
 			var listView = configMap.CreateMapper().Map<Questions, QuestionsView>(list);
 
