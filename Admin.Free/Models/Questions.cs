@@ -26,6 +26,7 @@ namespace Admin.Free.Models
         /// </summary>
         public string? category_name { get; set; }
 	 
+        public string? tags { get; set; }
 	
 	}
 }

@@ -3,7 +3,7 @@ using Admin.Free.Infra;
 using Admin.Free.Models;
 using Admin.Free.View;
 using AutoMapper;
-
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -83,16 +83,20 @@ namespace Admin.Free.Controllers
 		public ResultObjet<List<QuestionsView>> Get([FromQuery] QueryParameters queryParameters)
 		{
 			var configMap = new MapperConfiguration(cfg =>
+            {
 			cfg.CreateMap<Questions, QuestionsView>()
 			.ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList()))
-			.ForMember(x => x.correct_answer, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).Where(y => y.correct == true).Select(x => x.option_text).ToList()))
-			);
+                .ForMember(x => x.correct_answer, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).Where(y => y.correct == true).Select(x => x.option_text).ToList()));
 
-			var list = dbc.Questions.Page(queryParameters.Page, queryParameters.Size).ToList();
+                cfg.CreateMap<Questions, QuestionsView>().ForMember(x => x.tags, o => o.MapFrom(s => s.tags == null ? null : s.tags.Split(new char[] { ',' })));
+                cfg.CreateMap<QuestionsView, Questions>().ForMember(x => x.tags, o => o.MapFrom(s => s.tags == null ? null : string.Join(',', s.tags)));
 
-			var listView = configMap.CreateMapper().Map<List<Questions>, List<QuestionsView>>(list);
+            });
 
-			return this.OKResult(listView);
+            var list = dbc.Questions.Page(queryParameters.Page, queryParameters.Size).ProjectTo<QuestionsView>(configMap).ToList();
+
+
+            return this.OKResult(list);
 
 		}
 

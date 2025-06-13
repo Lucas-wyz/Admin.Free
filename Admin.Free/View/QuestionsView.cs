@@ -10,5 +10,6 @@ namespace Admin.Free.View
 		public IEnumerable<QuestionOptions> options { get; set; }
 
 		public IEnumerable<string> correct_answer { get; set; }
+        public new string[]? tags { get; set; }
 	}
 }
