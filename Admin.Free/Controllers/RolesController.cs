@@ -1,6 +1,10 @@
 ﻿using Admin.Free.Extensions;
 using Admin.Free.Infra;
 using Admin.Free.Models;
+using Admin.Free.View;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Admin.Free.Controllers
@@ -70,6 +74,13 @@ namespace Admin.Free.Controllers
 			{
 				item.IsDeleted = true;
 			}
+
+            var queryRoles = dbc.UserRole.Where(x => x.RoleID == ID).ToList();
+            foreach (var item in queryRoles)
+            {
+                item.IsDeleted = true;
+            }
+
 			dbc.SaveChanges();
 			return this.OKResult();
 		}

@@ -3,14 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 using Admin.Free;
 using Admin.Free.Infra;
 using Admin.Free.Extensions;
+using Admin.Free.Infra;
 using Admin.Free.Models;
 using Admin.Free.View;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using AutoMapper.Execution;
 using AutoMapper.Features;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Admin.Free.Controllers
@@ -61,8 +66,22 @@ namespace Admin.Free.Controllers
 		[HttpDelete("{ID}")]
 		public ResultObjet Del([FromRoute] string ID)
 		{
-			var query = dbc.Users.Find(ID);
-			dbc.Users.Remove(query);
+            var query = dbc.Users.Where(x => x.ID == ID).ToList();
+
+            foreach (var item in query)
+            {
+                item.IsDeleted = true;
+
+            }
+
+            var queryRoles = dbc.UserRole.Where(x => x.UserID == ID).ToList();
+
+            foreach (var item in queryRoles)
+            {
+                item.IsDeleted = true;
+
+            }
+
 			dbc.SaveChanges();
 			return this.OKResult();
 		}
