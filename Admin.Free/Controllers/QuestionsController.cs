@@ -24,10 +24,23 @@ namespace Admin.Free.Controllers
 		[HttpPost]
 		public ResultObjet Post([FromBody] QuestionsView obj)
 		{
-			dbc.Database.AutoTransactionBehavior = AutoTransactionBehavior.Never;
+
+            var configMap = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Questions, QuestionsView>()
+                .ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList()))
+                .ForMember(x => x.correct_answer, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).Where(y => y.correct == true).Select(x => x.option_text).ToList()));
+
+                cfg.CreateMap<Questions, QuestionsView>().ForMember(x => x.tags, o => o.MapFrom(s => s.tags == null ? null : s.tags.Split(new char[] { ',' })));
+                cfg.CreateMap<QuestionsView, Questions>().ForMember(x => x.tags, o => o.MapFrom(s => s.tags == null ? null : string.Join(',', s.tags)));
+
+            });
+
 
 			obj.ID = Guid.NewGuid().ToString("n");
-			dbc.Questions.Add(obj);
+            Questions _obj = configMap.CreateMapper().Map<Questions>(obj);
+
+            dbc.Questions.Add(_obj);
 
 			List<QuestionOptions> oplist = obj.options.ToList();
 
