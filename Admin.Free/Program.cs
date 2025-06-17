@@ -52,11 +52,8 @@ builder.Services.AddSerilog((service, logger) =>
     logger.WriteTo.Console();
 });
 
-//mongodb for ef
-builder.Services.AddDbContext<AppDbContext>((service, options) =>
-{
-	options.UseMongoDB(service.GetService<IConfiguration>().GetConnectionString("mongodb"), "appdb");
-});
+//EF
+builder.Services.AddEFDbContext(builder.Configuration);
 
 
 // AutoMapper
