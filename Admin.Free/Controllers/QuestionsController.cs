@@ -147,13 +147,28 @@ namespace Admin.Free.Controllers
 		public ActionResult Put([FromRoute] string id, [FromBody] QuestionsView obj)
 		{
 
+
+            var configMap = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Questions, QuestionsView>()
+                .ForMember(x => x.options, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).ToList()))
+                .ForMember(x => x.correct_answer, o => o.MapFrom(s => dbc.QuestionOptions.Where(y => y.QuestionID == s.ID).Where(y => y.correct == true).Select(x => x.option_text).ToList()))
+                .ForMember(x => x.tags, o => o.MapFrom(s => s.tags == null ? null : s.tags.Split(new char[] { ',' })));
+                cfg.CreateMap<QuestionsView, Questions>().ForMember(x => x.tags, o => o.MapFrom(s => s.tags == null ? null : string.Join(',', s.tags)));
+
+            });
+
+          var _obj=  configMap.CreateMapper().Map<Questions>(obj);
+
+
 			var questions = dbc.Questions.Find(id);
 
 
-			questions.question_title = obj.question_title;
-			questions.explanation_text = obj.explanation_text;
-			questions.question_type = obj.question_type;
-			questions.category_name = obj.category_name;
+            questions.question_title = _obj.question_title;
+            questions.explanation_text = _obj.explanation_text;
+            questions.question_type = _obj.question_type;
+            questions.category_name = _obj.category_name;
+            questions.tags = _obj.tags;
 
 			var QuestionOptionsList = dbc.QuestionOptions.Where(x => x.QuestionID == id).ToList();
 
