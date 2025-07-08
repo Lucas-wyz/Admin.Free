@@ -33,6 +33,23 @@ namespace Admin.Free.Controllers
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exams"></param>
+        /// <returns></returns>
+        [HttpPost()]
+        public ResultObjet<bool> Post([FromBody] Exams exams)
+        {
+            exams.ID = Guid.NewGuid().ToString("n");
+            exams.IsDeleted = false;
+            dbc.Add(exams);
+            dbc.SaveChanges();
+
+            return this.OKResult<bool>(true);
+        }
+
+
         [HttpDelete("{id}")]
         public ResultObjet<bool> Del([FromRoute] string id)
         {
@@ -68,59 +85,51 @@ namespace Admin.Free.Controllers
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="exams"></param>
-        /// <returns></returns>
-        [HttpPut("{id}")]
-        public ResultObjet<bool> Put([FromRoute] string id, [FromBody] Exams exams)
+        [HttpGet("ExamsQuertion/{id}")]
+        public ResultObjet<List<ExamsQuertion>> GetExamsQuertion([FromRoute] string id)
+        {
+            var query = dbc.ExamsQuertion.Where(x => x.ExamsID == id).ToList();
+
+            return this.OKResult(query);
+        }
+
+        [HttpPost("ExamsQuertion/{id}")]
+        public ResultObjet<bool> AddExamsQuertion([FromRoute] string id, [FromBody] string[] ff)
         {
 
-            var query = dbc.Exams.Where(x => x.ID == id).First();
-            query.Name = exams.Name;
-            query.Type = exams.Type;
+            List<ExamsQuertion> list = new List<ExamsQuertion>();
 
-            dbc.SaveChanges();
+            foreach (var item in ff)
+            {
+                list.Add(new ExamsQuertion()
+                {
+                    ID = Guid.NewGuid().ToString("n"),
+                    ExamsID = id,
+                    QuertionID = item,
+                    IsDeleted = false,
+                });
+            }
+
+            if (list.Count > 0)
+            {
+                dbc.ExamsQuertion.AddRange(list);
+                dbc.SaveChanges();
+            }
 
             return this.OKResult<bool>(true);
         }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="exams"></param>
-        /// <returns></returns>
-        [HttpPut("{id}")]
-        public ResultObjet<bool> Put([FromRoute] string id, [FromBody] Exams exams)
+        [HttpDelete("ExamsQuertion/{id}")]
+        public ResultObjet<bool> DelExamsQuertion([FromRoute] string id)
         {
+            var query = dbc.ExamsQuertion.Where(x => x.ExamsID == id).ToList();
 
-            var query = dbc.Exams.Where(x => x.ID == id).First();
-            query.Name = exams.Name;
-            query.Type = exams.Type;
-
+            foreach (var item in query)
+            {
+                item.IsDeleted = true;
+            }
             dbc.SaveChanges();
 
-            return this.OKResult<bool>(true);
-        }
-
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="exams"></param>
-        /// <returns></returns>
-        [HttpPost()]
-        public ResultObjet<bool> Post([FromBody] Exams exams)
-        {
-            exams.ID = Guid.NewGuid().ToString("n");
-
-            dbc.Add(exams);
-            dbc.SaveChanges();
-
-            return this.OKResult<bool>(true);
+            return this.OKResult(true);
         }
 
     }
