@@ -118,6 +118,25 @@ namespace Admin.Free.Controllers
 
             return this.OKResult<bool>(true);
         }
+
+
+        [HttpDelete("ExamsQuertion")]
+        public ResultObjet<bool> DelExamsQuertion([FromQuery] string[] ids)
+        {
+            ids = ids ?? new string[] { };
+            var query = dbc.ExamsQuertion.Where(x => ids.Contains(x.ExamsID)).ToList();
+
+            foreach (var item in query)
+            {
+                item.IsDeleted = true;
+            }
+            dbc.SaveChanges();
+
+            return this.OKResult(true);
+        }
+
+
+
         [HttpDelete("ExamsQuertion/{id}")]
         public ResultObjet<bool> DelExamsQuertion([FromRoute] string id)
         {
