@@ -30,17 +30,19 @@ namespace Admin.Free.Controllers
 		{
 
 			var configMap = new MapperConfiguration(cfg =>
+            {
 			cfg.CreateMap<Users, UsersView>()
-			.ForMember(x => x.RoleList, o => o.MapFrom(s => dbc.UserRole.Where(y => y.UserID == s.ID).Select(y => y.RoleID).ToList()))
-			);
+                .ForMember(x => x.RoleList, o => o.MapFrom(s => dbc.UserRole.Where(y => y.UserID == s.ID).Select(y => y.RoleID).ToList()));
+            });
+
 			var query = dbc.Users.AsQueryable();
 			if (!string.IsNullOrWhiteSpace(name))
 			{
 				query = query.Where(x => x.Name.Contains(name));
 			}
 
-            var list = query.Page(queryParameters.Page, queryParameters.Size).ToList().ProjectTo<UsersView>(ConfigurationProvider).ToList();
-		
+            var list = query.Page(queryParameters.Page, queryParameters.Size).ProjectTo<UsersView>(configMap).ToList();
+
 			return this.OKResult<List<UsersView>>(list);
 		}
 
