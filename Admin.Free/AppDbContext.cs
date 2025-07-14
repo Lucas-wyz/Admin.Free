@@ -15,6 +15,7 @@ namespace Admin.Free
 			_tenantId = _httpContext.Request.Headers["TenantId"];
         }
 
+        public DbSet<Permissions> Permissions => Set<Permissions>();
 		public DbSet<Accounts> Accounts => Set<Accounts>();
         public DbSet<Users> Users => Set<Users>();
         public DbSet<Roles> Roles => Set<Roles>();
