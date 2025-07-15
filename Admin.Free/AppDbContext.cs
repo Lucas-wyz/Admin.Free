@@ -19,6 +19,7 @@ namespace Admin.Free
 		public DbSet<Accounts> Accounts => Set<Accounts>();
         public DbSet<Users> Users => Set<Users>();
         public DbSet<Roles> Roles => Set<Roles>();
+        public DbSet<RolePermission> RolePermission => Set<RolePermission>();
 		public DbSet<Questions> Questions => Set<Questions>();
 		public DbSet<QuestionOptions> QuestionOptions => Set<QuestionOptions>();
 		public DbSet<QuestionHistory> QuestionHistory => Set<QuestionHistory>();
