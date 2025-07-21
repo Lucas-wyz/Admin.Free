@@ -18,6 +18,7 @@ namespace Admin.Free
         public DbSet<Permissions> Permissions => Set<Permissions>();
 		public DbSet<Accounts> Accounts => Set<Accounts>();
         public DbSet<Users> Users => Set<Users>();
+        public DbSet<AnonymousUsers> AnonymousUsers => Set<AnonymousUsers>();
         public DbSet<Roles> Roles => Set<Roles>();
         public DbSet<RolePermission> RolePermission => Set<RolePermission>();
 		public DbSet<Questions> Questions => Set<Questions>();
