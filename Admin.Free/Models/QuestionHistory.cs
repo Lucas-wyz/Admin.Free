@@ -33,5 +33,9 @@ namespace Admin.Free.Models
 		public bool? is_correct { get; set; }
 
 
+        /// <summary>
+        /// 是匿名用户
+        /// </summary>
+        public bool? AnonymousUsers { get; set; }
 	}
 }

@@ -8,8 +8,21 @@ namespace Admin.Free.View
 	public class QuestionsView : Questions
 	{
 		public IEnumerable<QuestionOptions> options { get; set; }
+        /// <summary>
+        /// 正确答案
+        /// </summary>
 
-		public IEnumerable<string> correct_answer { get; set; }
+        /// <summary>
+        /// 标签
+        /// </summary>
         public new string[]? tags { get; set; }
+
+
+
+        /// <summary>
+        /// 是匿名用户
+        /// </summary>
+        public bool? AnonymousUsers { get; set; }
+
 	}
 }

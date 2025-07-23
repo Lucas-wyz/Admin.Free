@@ -276,6 +276,7 @@ namespace Admin.Free.Controllers
 				QuestionID = obj.ID,
 				is_correct = _tag,
 				submit_time = DateTime.Now,
+                AnonymousUsers = obj.AnonymousUsers,
 				UserID = "",
 				UserName = "",
 			});
