@@ -277,7 +277,7 @@ namespace Admin.Free.Controllers
 				is_correct = _tag,
 				submit_time = DateTime.Now,
                 AnonymousUsers = obj.AnonymousUsers,
-				UserID = "",
+                UserID = HttpContext.User.GetId() ?? "",
 				UserName = "",
 			});
 			dbc.SaveChanges();
