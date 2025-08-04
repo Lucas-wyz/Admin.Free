@@ -24,7 +24,10 @@ public static class AddEFDbContextExtension
                 var conn = configuration.GetConnectionString("mongodbforbi");
                 var serverVersion = MySqlServerVersion.AutoDetect(conn);
                 //mysql for ef
-                options.UseMySql(conn, serverVersion);
+                options.UseMySql(conn, serverVersion)
+                //敏感数据
+                .EnableSensitiveDataLogging(true)
+                ;
             }
             else
             {
