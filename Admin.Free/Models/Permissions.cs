@@ -11,6 +11,7 @@ namespace Admin.Free.Models
         public string? Name { get; set; }
         public string? UrlStr { get; set; }
         public string? Remark { get; set; }
+        public string? Pid { get; set; }
       
     }
 }
