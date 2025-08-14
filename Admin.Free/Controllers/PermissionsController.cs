@@ -2,6 +2,7 @@
 using Admin.Free.Infra;
 using Admin.Free.Models;
 using Admin.Free.View;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Principal;
 
@@ -18,6 +19,10 @@ namespace Admin.Free.Controllers
     //[Authorize]
     public class PermissionsController(AppDbContext dbc, ILogger<PermissionsController> logger) : ControllerBase
     {
+        public MapperConfiguration _configMap => new MapperConfiguration(cfg =>
+        {
+            cfg.CreateMap<Permissions, PermissionNodeView>();
+        });
 
 
         [HttpGet]
@@ -74,6 +79,34 @@ namespace Admin.Free.Controllers
 
             dbc.SaveChanges();
             return this.OKResult();
+        }
+
+
+        [HttpGet("GetTree")]
+        public ResultObjet<List<PermissionNodeView>> GetTree()
+        {
+            var query = dbc.Permissions.ToList();
+            var list = GetPermissionTree(query);
+            return this.OKResult(list);
+        }
+
+        private List<PermissionNodeView> GetPermissionTree(List<Permissions> list, string pid = "0")
+        {
+            if (list.Count > 0)
+            {
+                if (pid != null)
+                {
+                    var viewList = list.Where(x => x.Pid == pid)
+                        .Select(x =>
+                        {
+                            var view = _configMap.CreateMapper().Map<PermissionNodeView>(x);
+                            view.Children = GetPermissionTree(list, x.ID);
+                            return view;
+                        }).ToList();
+                    return viewList;
+                }
+            }
+            return new List<PermissionNodeView>();
         }
 
 
